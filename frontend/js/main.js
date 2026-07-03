@@ -1,10 +1,15 @@
+const themeToggle = document.getElementById("themeToggle");
+const root = document.documentElement;
 const siteHeader = document.getElementById("siteHeader");
 const menuToggle = document.getElementById("menuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
 
-window.addEventListener("scroll", () => {
+function handleHeaderScroll() {
   siteHeader.classList.toggle("scrolled", window.scrollY > 8);
-});
+}
+
+window.addEventListener("scroll", handleHeaderScroll);
+handleHeaderScroll();
 
 menuToggle.addEventListener("click", () => {
   const isOpen = mobileMenu.classList.toggle("open");
@@ -20,4 +25,19 @@ mobileMenu.querySelectorAll("a").forEach((link) => {
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.setAttribute("aria-label", "Open menu");
   });
+});
+function updateThemeLabel() {
+  const theme = root.getAttribute("data-theme");
+  themeToggle.setAttribute(
+    "aria-label",
+    theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+  );
+}
+
+updateThemeLabel();
+
+themeToggle.addEventListener("click", () => {
+  const nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", nextTheme);
+  updateThemeLabel();
 });

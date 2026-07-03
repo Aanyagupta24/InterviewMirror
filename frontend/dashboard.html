@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterviewMirror Dashboard</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=general-sans@500,600,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <a class="skip-link" href="#dashboardMain">Skip to content</a>
+
+  <div class="dashboard-layout">
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="3.5" y="3.5" width="21" height="21" rx="7" stroke="currentColor" stroke-width="1.5" opacity="0.28"/>
+            <path d="M9 9.5C9 8.67157 9.67157 8 10.5 8H12C12.8284 8 13.5 8.67157 13.5 9.5V18.5C13.5 19.3284 12.8284 20 12 20H10.5C9.67157 20 9 19.3284 9 18.5V9.5Z" fill="currentColor"/>
+            <path d="M15 11.25C15 10.5596 15.5596 10 16.25 10H17.75C18.4404 10 19 10.5596 19 11.25V16.75C19 17.4404 18.4404 18 17.75 18H16.25C15.5596 18 15 17.4404 15 16.75V11.25Z" fill="currentColor" opacity="0.55"/>
+            <path d="M7.5 22.25C9.4 19.9 11.7833 18.725 14.65 18.725C17.1167 18.725 19.4 19.5667 21.5 21.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+          </svg>
+        </span>
+        <div class="sidebar-brand-copy">
+          <strong>InterviewMirror</strong>
+          <span>Student Workspace</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Dashboard navigation">
+        <a href="#" class="active">Overview</a>
+        <a href="#">Mock Interviews</a>
+        <a href="#">Feedback Reports</a>
+        <a href="#">Question Bank</a>
+        <a href="#">Performance Trends</a>
+        <a href="#">Settings</a>
+      </nav>
+
+      <div class="sidebar-card">
+        <p>Next focus area</p>
+        <strong>Reduce filler words in behavioral answers.</strong>
+      </div>
+    </aside>
+
+    <div class="dashboard-content">
+      <header class="dashboard-topbar">
+        <div>
+          <p class="topbar-label">Today’s workspace</p>
+          <h1>Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <input class="topbar-search" type="search" placeholder="Search sessions" aria-label="Search sessions" />
+          <button class="dashboard-primary-btn">Start Interview</button>
+        </div>
+      </header>
+
+      <main id="dashboardMain" class="dashboard-main">
+        <section class="stats-grid">
+          <article class="metric-panel">
+            <span>Interviews completed</span>
+            <strong>18</strong>
+          </article>
+          <article class="metric-panel">
+            <span>Average confidence</span>
+            <strong>84%</strong>
+          </article>
+          <article class="metric-panel">
+            <span>Practice streak</span>
+            <strong>6 days</strong>
+          </article>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-heading">
+            <h2>Interview tracks</h2>
+            <a href="#" class="text-link">View all</a>
+          </div>
+
+          <div class="interview-cards">
+            <article class="interview-card">
+              <span class="card-badge">Behavioral</span>
+              <h3>Tell me about yourself</h3>
+              <p>Practice structured introductions with timing, clarity, and confidence feedback.</p>
+              <button class="card-action">Resume practice</button>
+            </article>
+
+            <article class="interview-card">
+              <span class="card-badge">Technical</span>
+              <h3>System design basics</h3>
+              <p>Explain architecture decisions while staying concise and logically organized.</p>
+              <button class="card-action">Start round</button>
+            </article>
+
+            <article class="interview-card">
+              <span class="card-badge">HR Round</span>
+              <h3>Conflict resolution</h3>
+              <p>Improve storytelling quality and reduce filler-heavy transitions in answers.</p>
+              <button class="card-action">Practice now</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-heading">
+            <h2>Recent sessions</h2>
+            <a href="#" class="text-link">Export</a>
+          </div>
+
+          <div class="session-table-wrap">
+            <table class="session-table">
+              <thead>
+                <tr>
+                  <th>Session</th>
+                  <th>Type</th>
+                  <th>Score</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Frontend mock interview</td>
+                  <td>Technical</td>
+                  <td>88%</td>
+                  <td>Today</td>
+                </tr>
+                <tr>
+                  <td>Behavioral round practice</td>
+                  <td>Behavioral</td>
+                  <td>81%</td>
+                  <td>Yesterday</td>
+                </tr>
+                <tr>
+                  <td>HR confidence session</td>
+                  <td>HR</td>
+                  <td>85%</td>
+                  <td>2 days ago</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

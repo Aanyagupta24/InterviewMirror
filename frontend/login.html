@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | InterviewMirror</title>
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body class="login-page">
+    <main class="auth-shell">
+      <section class="auth-panel">
+        <a href="index.html" class="auth-brand">InterviewMirror</a>
+
+        <div class="auth-header">
+          <span class="auth-eyebrow">Secure access</span>
+          <h1>Sign in to continue practicing.</h1>
+          <p>
+            Access your interview sessions, feedback history, and progress
+            tracking.
+          </p>
+        </div>
+
+        <div class="auth-context-card">
+          <span class="context-label">Session readiness</span>
+          <div class="context-row">
+            <span>Audio input</span>
+            <strong>Ready</strong>
+          </div>
+          <div class="context-row">
+            <span>Practice mode</span>
+            <strong>Behavioral</strong>
+          </div>
+        </div>
+
+        <form class="auth-form">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" />
+
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+          />
+
+          <div class="auth-meta">
+            <label class="checkbox-wrap">
+              <input type="checkbox" />
+              <span>Remember me</span>
+            </label>
+
+            <a href="#" class="text-link">Forgot password</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary auth-submit">
+            Sign In
+          </button>
+
+          <div class="or-divider">
+            <span>OR</span>
+          </div>
+
+          <button type="button" class="btn btn-google">
+            <span class="google-icon">G</span>
+            Continue with Google
+          </button>
+        </form>
+
+        <p class="auth-footer-note">
+          New to InterviewMirror?
+          <a href="#" class="text-link">Create account</a>
+        </p>
+      </section>
+
+      <aside class="auth-showcase">
+        <div class="interview-visual-panel">
+          <div class="mic-glow"></div>
+          <div class="floating-circle floating-circle-1"></div>
+          <div class="floating-circle floating-circle-2"></div>
+          <div class="grid-overlay"></div>
+
+          <div class="recording-card">
+            <div class="recording-badge">
+              <span class="recording-dot"></span>
+              Live Interview Session
+            </div>
+
+            <div class="mic-stage">
+              <div class="mic-ring ring-1"></div>
+              <div class="mic-ring ring-2"></div>
+
+              <div class="mic-core">
+                <div class="mic-icon">🎤</div>
+              </div>
+            </div>
+
+            <div class="recording-copy">
+              <h3>Recording...</h3>
+              <p>
+                Your answer is being analyzed for pace, filler words, clarity,
+                and confidence.
+              </p>
+            </div>
+
+            <div class="voice-bars" aria-label="Audio level animation">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>
