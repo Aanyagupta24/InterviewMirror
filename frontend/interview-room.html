@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterviewMirror - Interview Room</title>
+
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=general-sans@500,600,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #04070d;
+      --bg-2: #08111c;
+      --surface: rgba(255,255,255,0.05);
+      --surface-2: rgba(255,255,255,0.07);
+      --surface-3: rgba(255,255,255,0.09);
+      --border: rgba(255,255,255,0.09);
+      --text: #f4f7fb;
+      --text-muted: #9ca8b8;
+      --text-faint: #6e7785;
+      --primary: #84cbff;
+      --primary-strong: #5ebeff;
+      --primary-soft: rgba(132,203,255,0.16);
+      --success: #66e39d;
+      --warning: #ffcd70;
+      --danger: #ff6d77;
+
+      --font-body: "Satoshi", "Inter", sans-serif;
+      --font-display: "General Sans", "Inter", sans-serif;
+
+      --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.84rem + 0.2vw, 1rem);
+      --text-base: clamp(1rem, 0.96rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.15rem, 1rem + 0.8vw, 1.6rem);
+      --text-xl: clamp(2rem, 1.3rem + 2.7vw, 4.8rem);
+
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+
+      --radius-md: 18px;
+      --radius-lg: 26px;
+      --radius-xl: 34px;
+      --radius-full: 999px;
+
+      --shadow-soft: 0 20px 60px rgba(0,0,0,0.28);
+      --shadow-strong: 0 32px 100px rgba(0,0,0,0.40);
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(94,190,255,0.10), transparent 16%),
+        radial-gradient(circle at 50% 78%, rgba(94,190,255,0.05), transparent 20%),
+        linear-gradient(180deg, #08111c 0%, #04070d 100%);
+      overflow: hidden;
+    }
+
+    button, input, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    video, canvas, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    .app {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 22px 24px 20px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .ambient-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at 50% 45%, black 20%, transparent 78%);
+      -webkit-mask-image: radial-gradient(circle at 50% 45%, black 20%, transparent 78%);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle-field {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 400ms var(--ease);
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(132,203,255,0.7);
+      box-shadow: 0 0 14px rgba(132,203,255,0.5);
+      animation: floatUp linear infinite;
+    }
+
+    .app.thinking .particle-field,
+    .app.report .particle-field {
+      opacity: 1;
+    }
+
+    .topbar,
+    .bottombar {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: -0.03em;
+      opacity: 0.95;
+      transition: opacity 300ms var(--ease);
+    }
+
+    .timer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      backdrop-filter: blur(10px);
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .main {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      min-height: 0;
+    }
+
+    .stage {
+      width: min(100%, 1040px);
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 20px;
+      text-align: center;
+      transition: transform 500ms var(--ease), opacity 500ms var(--ease);
+    }
+
+    .orb-zone {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      margin-bottom: 2px;
+    }
+
+    .orb-shell {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb-ring,
+    .orb-ring-2 {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(132,203,255,0.10);
+      opacity: 0.45;
+      transform: scale(1);
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .orb-ring-2 {
+      inset: 10px;
+      border-color: rgba(132,203,255,0.14);
+      opacity: 0.30;
+    }
+
+    .orb {
+      position: relative;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 28%, rgba(255,255,255,0.95), rgba(132,203,255,0.44) 26%, rgba(132,203,255,0.18) 48%, rgba(132,203,255,0.04) 68%, transparent 74%),
+        radial-gradient(circle at center, rgba(132,203,255,0.32), rgba(132,203,255,0.04));
+      box-shadow:
+        0 0 26px rgba(132,203,255,0.24),
+        0 0 74px rgba(132,203,255,0.10);
+      transition: transform 300ms var(--ease), box-shadow 300ms var(--ease), filter 300ms var(--ease);
+      will-change: transform;
+    }
+
+    .orb::after {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px solid rgba(132,203,255,0.08);
+      opacity: 0.5;
+    }
+
+    .orb-label {
+      min-height: 24px;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      transition: opacity 260ms var(--ease), transform 260ms var(--ease);
+    }
+
+    .hero-copy {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      min-height: 156px;
+      align-content: center;
+    }
+
+    .hero-kicker {
+      color: var(--text-faint);
+      font-size: var(--text-xs);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .question {
+      max-width: 15ch;
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+      opacity: 0.98;
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .subcopy {
+      min-height: 26px;
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      opacity: 0.9;
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .speaker-ui {
+      width: min(100%, 880px);
+      display: grid;
+      justify-items: center;
+      gap: 18px;
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+      pointer-events: none;
+      transition: opacity 500ms var(--ease), transform 500ms var(--ease);
+    }
+
+    .app.user .speaker-ui,
+    .app.thinking .speaker-ui,
+    .app.ai-speaking.active-question .speaker-ui {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .camera-wrap {
+      width: min(100%, 420px);
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+
+    .camera-card {
+      position: relative;
+      width: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        rgba(255,255,255,0.02);
+      box-shadow: var(--shadow-soft);
+      aspect-ratio: 16 / 10;
+    }
+
+    .camera-head {
+      position: absolute;
+      inset: 0 auto auto 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 12px 0;
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .camera-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(102,227,157,0.10);
+    }
+
+    .camera-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      display: none;
+      background: #0b1017;
+    }
+
+    .cam-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      text-align: center;
+      color: var(--text-muted);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(132,203,255,0.08), transparent 18%),
+        linear-gradient(180deg, #121b26, #0a0f17);
+    }
+
+    .cam-fallback-inner {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      max-width: 28ch;
+    }
+
+    .cam-badge {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--primary);
+    }
+
+    .camera-meta {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--text-muted);
+      font-size: var(--text-xs);
+    }
+
+    .meta-left,
+    .meta-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .transcript {
+      width: min(100%, 720px);
+      min-height: 72px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        rgba(255,255,255,0.02);
+      padding: 16px 18px;
+      text-align: left;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 8px;
+    }
+
+    .transcript-label {
+      color: var(--text-faint);
+      font-size: var(--text-xs);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .transcript-text {
+      color: var(--text);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      min-height: 30px;
+    }
+
+    .metrics {
+      width: min(100%, 860px);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+        rgba(255,255,255,0.02);
+      padding: 14px 14px 12px;
+      text-align: left;
+      box-shadow: var(--shadow-soft);
+      transform: translateY(10px);
+      opacity: 0;
+      transition: opacity 400ms var(--ease), transform 400ms var(--ease), border-color 240ms var(--ease);
+    }
+
+    .metric-card.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-faint);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    .metric-note {
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: var(--text-xs);
+    }
+
+    .wave-zone {
+      width: min(100%, 780px);
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+    }
+
+    .mic-orb {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08), rgba(132,203,255,0.08)),
+        rgba(255,255,255,0.03);
+      box-shadow: 0 0 22px rgba(132,203,255,0.08);
+      transition: transform 240ms var(--ease), box-shadow 240ms var(--ease), opacity 240ms var(--ease);
+    }
+
+    .app.user .mic-orb {
+      box-shadow:
+        0 0 28px rgba(132,203,255,0.16),
+        0 0 70px rgba(132,203,255,0.06);
+    }
+
+    .wave-shell {
+      width: 100%;
+      height: 92px;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+        rgba(255,255,255,0.02);
+      box-shadow: var(--shadow-soft);
+    }
+
+    #waveCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .status-line {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      min-height: 48px;
+    }
+
+    .status-main {
+      font-size: var(--text-base);
+      color: var(--text);
+    }
+
+    .status-sub {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    .bottombar {
+      position: relative;
+      z-index: 3;
+      justify-content: center;
+      gap: 14px;
+      padding-top: 6px;
+      transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    }
+
+    .control {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      transition: transform 220ms var(--ease), background 220ms var(--ease), border-color 220ms var(--ease), opacity 220ms var(--ease);
+    }
+
+    .control:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .control.leave {
+      background: rgba(255,109,119,0.10);
+      border-color: rgba(255,109,119,0.22);
+      color: #ffd7da;
+    }
+
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%) translateY(6px);
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(10,15,22,0.94);
+      color: var(--text-muted);
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+    }
+
+    .control:hover .tooltip,
+    .control:focus-visible .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .overlay,
+    .report-screen {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 420ms var(--ease);
+    }
+
+    .overlay.show,
+    .report-screen.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .thinking-card,
+    .report-card {
+      width: min(92vw, 560px);
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)),
+        rgba(7,11,17,0.90);
+      box-shadow: var(--shadow-strong);
+      padding: 28px;
+      text-align: center;
+      backdrop-filter: blur(18px);
+    }
+
+    .thinking-title,
+    .report-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.7rem, 1.3rem + 1.5vw, 2.8rem);
+      letter-spacing: -0.05em;
+      margin-bottom: 10px;
+    }
+
+    .thinking-sub,
+    .report-sub {
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+    }
+
+    .loader-bar {
+      width: 100%;
+      height: 12px;
+      margin-top: 20px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .loader-fill {
+      width: 38%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), #b8e5ff);
+      animation: loading 1.2s ease-in-out infinite alternate;
+    }
+
+    .report-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      text-align: left;
+    }
+
+    .report-box {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      padding: 14px;
+    }
+
+    .report-box-label {
+      color: var(--text-faint);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .report-box-value {
+      margin-top: 6px;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: -0.04em;
+    }
+
+    .report-mini-chart {
+      margin-top: 18px;
+      height: 110px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        rgba(255,255,255,0.02);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-line {
+      position: absolute;
+      inset: auto 0 18px 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(132,203,255,0.14), transparent);
+    }
+
+    .chart-bars {
+      position: absolute;
+      inset: 16px 18px 18px 18px;
+      display: flex;
+      align-items: end;
+      gap: 10px;
+    }
+
+    .chart-bars span {
+      flex: 1;
+      border-radius: 999px 999px 8px 8px;
+      background: linear-gradient(180deg, #9ddcff, #4cabff);
+      transform-origin: bottom;
+      animation: growBars 900ms var(--ease) both;
+    }
+
+    .prepare-only .speaker-ui,
+    .prepare-only .bottombar,
+    .prepare-only .timer {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+
+    .ai-intro .speaker-ui,
+    .ai-intro .bottombar {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .camera-hidden .camera-wrap,
+    .camera-hidden .wave-zone,
+    .camera-hidden .transcript,
+    .camera-hidden .metrics {
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+    }
+
+    .camera-wrap,
+    .wave-zone,
+    .transcript,
+    .metrics {
+      transition: opacity 500ms var(--ease), transform 500ms var(--ease);
+    }
+
+    .app.ai-speaking .orb {
+      animation: orbSpeak 1.6s ease-in-out infinite;
+    }
+
+    .app.ai-speaking .orb-ring {
+      animation: ringPulse 1.6s ease-in-out infinite;
+    }
+
+    .app.ai-speaking .orb-ring-2 {
+      animation: ringPulse 1.6s ease-in-out infinite 120ms;
+    }
+
+    .app.user .orb {
+      animation: none;
+      transform: scale(0.92);
+      box-shadow: 0 0 20px rgba(132,203,255,0.10), 0 0 40px rgba(132,203,255,0.05);
+      filter: saturate(0.85);
+    }
+
+    .app.thinking .orb {
+      animation: orbThink 5s linear infinite;
+      box-shadow: 0 0 34px rgba(132,203,255,0.20), 0 0 100px rgba(132,203,255,0.14);
+    }
+
+    .app.preparing .orb {
+      animation: orbPrepare 1.9s ease-in-out infinite;
+      transform: scale(0.96);
+    }
+
+    @keyframes orbSpeak {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.10); }
+    }
+
+    @keyframes ringPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.28;
+      }
+      50% {
+        transform: scale(1.16);
+        opacity: 0.62;
+      }
+    }
+
+    @keyframes orbPrepare {
+      0%, 100% {
+        transform: scale(0.95);
+        opacity: 0.78;
+      }
+      50% {
+        transform: scale(1.03);
+        opacity: 1;
+      }
+    }
+
+    @keyframes orbThink {
+      from { transform: rotate(0deg) scale(1.02); }
+      to { transform: rotate(360deg) scale(1.02); }
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) scale(0.9);
+        opacity: 0;
+      }
+      15% { opacity: 1; }
+      to {
+        transform: translateY(-180px) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes loading {
+      from { width: 28%; }
+      to { width: 84%; }
+    }
+
+    @keyframes growBars {
+      from { transform: scaleY(0.08); opacity: 0; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+
+    @media (max-width: 860px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        min-height: 100vh;
+        padding: 16px 14px 18px;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .question {
+        max-width: 16ch;
+      }
+
+      .speaker-ui {
+        width: 100%;
+      }
+
+      .camera-wrap {
+        width: min(100%, 100%);
+      }
+
+      .report-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .orb-shell {
+        width: 104px;
+        height: 104px;
+      }
+
+      .orb {
+        width: 84px;
+        height: 84px;
+      }
+
+      .question {
+        font-size: clamp(1.9rem, 1.3rem + 2vw, 3rem);
+      }
+
+      .wave-shell {
+        height: 80px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app preparing prepare-only ai-intro camera-hidden" id="app">
+    <div class="ambient-grid"></div>
+
+    <div class="particle-field" id="particleField">
+      <span class="particle" style="left:14%; bottom:18%; animation-duration:5.8s; animation-delay:0s;"></span>
+      <span class="particle" style="left:26%; bottom:12%; animation-duration:6.2s; animation-delay:0.7s;"></span>
+      <span class="particle" style="left:38%; bottom:8%; animation-duration:5.2s; animation-delay:1.4s;"></span>
+      <span class="particle" style="left:52%; bottom:16%; animation-duration:6.5s; animation-delay:0.3s;"></span>
+      <span class="particle" style="left:64%; bottom:10%; animation-duration:5.6s; animation-delay:1.2s;"></span>
+      <span class="particle" style="left:76%; bottom:18%; animation-duration:6.1s; animation-delay:0.5s;"></span>
+      <span class="particle" style="left:86%; bottom:12%; animation-duration:5.4s; animation-delay:1.6s;"></span>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">InterviewMirror</div>
+      <div class="timer" id="timer">00:00</div>
+    </header>
+
+    <main class="main">
+      <section class="stage" id="stage">
+        <div class="orb-zone">
+          <div class="orb-shell">
+            <div class="orb-ring"></div>
+            <div class="orb-ring-2"></div>
+            <div class="orb" id="orb"></div>
+          </div>
+          <div class="orb-label" id="orbLabel">Preparing your interviewer...</div>
+        </div>
+
+        <div class="hero-copy">
+          <div class="hero-kicker" id="heroKicker">Interview session</div>
+          <h1 class="question" id="questionText">Preparing your interviewer...</h1>
+          <div class="subcopy" id="subcopy">Calibrating voice, personality, and interview flow.</div>
+        </div>
+
+        <div class="speaker-ui" id="speakerUI">
+          <div class="camera-wrap">
+            <div class="camera-card">
+              <div class="camera-head">
+                <span class="camera-dot"></span>
+                <span id="cameraState">Candidate camera</span>
+              </div>
+
+              <video id="video" autoplay muted playsinline></video>
+
+              <div class="cam-fallback" id="camFallback">
+                <div class="cam-fallback-inner">
+                  <div class="cam-badge">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M15 10l4.553 -2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1 -1.447 .894L15 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <rect x="3" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                  </div>
+                  <div>Allow camera access to preview yourself during the interview.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="camera-meta">
+              <div class="meta-left">
+                <div class="pill" id="eyeContactPill">👀 Eye contact: --</div>
+              </div>
+              <div class="meta-right">
+                <div class="pill" id="speechTimerPill">⏱ 00:00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wave-zone">
+            <div class="mic-orb" id="micOrb">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="wave-shell">
+              <canvas id="waveCanvas"></canvas>
+            </div>
+
+            <div class="status-line">
+              <div class="status-main" id="statusMain">Listening...</div>
+              <div class="status-sub" id="statusSub">Your voice activity appears here.</div>
+            </div>
+          </div>
+
+          <div class="transcript">
+            <div class="transcript-label">Live transcript</div>
+            <div class="transcript-text" id="transcriptText">Your live response will appear here.</div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric-card" id="metric1">
+              <div class="metric-top"><span>😊 Confidence</span><span>Live</span></div>
+              <div class="metric-value" id="confidenceValue">--</div>
+              <div class="metric-note">Voice stability and pacing</div>
+            </div>
+
+            <div class="metric-card" id="metric2">
+              <div class="metric-top"><span>⚡ Speaking speed</span><span>Live</span></div>
+              <div class="metric-value" id="wpmValue">--</div>
+              <div class="metric-note">Estimated words per minute</div>
+            </div>
+
+            <div class="metric-card" id="metric3">
+              <div class="metric-top"><span>👀 Eye contact</span><span>Live</span></div>
+              <div class="metric-value" id="eyeValue">--</div>
+              <div class="metric-note">Camera-facing consistency</div>
+            </div>
+
+            <div class="metric-card" id="metric4">
+              <div class="metric-top"><span>😐 Filler words</span><span>Live</span></div>
+              <div class="metric-value" id="fillerValue">--</div>
+              <div class="metric-note">Approximate spoken fillers</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottombar" id="bottombar">
+      <button class="control" id="muteBtn" aria-label="Mute microphone">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tooltip">Mute</span>
+      </button>
+
+      <button class="control" id="pauseBtn" aria-label="Pause interview">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tooltip">Pause</span>
+      </button>
+
+      <button class="control leave" id="leaveBtn" aria-label="Leave interview">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 12H3M10 7l-5 5 5 5M21 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="tooltip">Leave</span>
+      </button>
+    </footer>
+
+    <div class="overlay" id="thinkingOverlay">
+      <div class="thinking-card">
+        <div class="thinking-title">Analyzing your answer...</div>
+        <div class="thinking-sub">Checking speech pace, clarity, confidence, structure, and delivery signals.</div>
+        <div class="loader-bar">
+          <div class="loader-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-screen" id="reportScreen">
+      <div class="report-card">
+        <div class="report-title">Generating report...</div>
+        <div class="report-sub">InterviewMirror is assembling a performance snapshot from your latest response.</div>
+
+        <div class="report-grid">
+          <div class="report-box">
+            <div class="report-box-label">Confidence score</div>
+            <div class="report-box-value">84</div>
+          </div>
+          <div class="report-box">
+            <div class="report-box-label">Speech pace</div>
+            <div class="report-box-value">132 WPM</div>
+          </div>
+          <div class="report-box">
+            <div class="report-box-label">Eye contact</div>
+            <div class="report-box-value">Good</div>
+          </div>
+          <div class="report-box">
+            <div class="report-box-label">Filler words</div>
+            <div class="report-box-value">2</div>
+          </div>
+        </div>
+
+        <div class="report-mini-chart">
+          <div class="chart-line"></div>
+          <div class="chart-bars">
+            <span style="height: 46%; animation-delay: 0ms;"></span>
+            <span style="height: 84%; animation-delay: 80ms;"></span>
+            <span style="height: 68%; animation-delay: 140ms;"></span>
+            <span style="height: 91%; animation-delay: 220ms;"></span>
+            <span style="height: 62%; animation-delay: 300ms;"></span>
+            <span style="height: 76%; animation-delay: 380ms;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById("app");
+    const orbLabel = document.getElementById("orbLabel");
+    const questionText = document.getElementById("questionText");
+    const heroKicker = document.getElementById("heroKicker");
+    const subcopy = document.getElementById("subcopy");
+    const timer = document.getElementById("timer");
+    const speechTimerPill = document.getElementById("speechTimerPill");
+    const cameraState = document.getElementById("cameraState");
+    const video = document.getElementById("video");
+    const camFallback = document.getElementById("camFallback");
+    const waveCanvas = document.getElementById("waveCanvas");
+    const statusMain = document.getElementById("statusMain");
+    const statusSub = document.getElementById("statusSub");
+    const transcriptText = document.getElementById("transcriptText");
+    const eyeContactPill = document.getElementById("eyeContactPill");
+    const confidenceValue = document.getElementById("confidenceValue");
+    const wpmValue = document.getElementById("wpmValue");
+    const eyeValue = document.getElementById("eyeValue");
+    const fillerValue = document.getElementById("fillerValue");
+    const thinkingOverlay = document.getElementById("thinkingOverlay");
+    const reportScreen = document.getElementById("reportScreen");
+    const muteBtn = document.getElementById("muteBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const leaveBtn = document.getElementById("leaveBtn");
+    const metricCards = [
+      document.getElementById("metric1"),
+      document.getElementById("metric2"),
+      document.getElementById("metric3"),
+      document.getElementById("metric4")
+    ];
+
+    const ctx = waveCanvas.getContext("2d");
+
+    const STATES = {
+      PREPARING: "preparing",
+      AI_INTRO: "ai-intro",
+      AI_SPEAKING: "ai-speaking",
+      USER: "user",
+      THINKING: "thinking",
+      REPORT: "report",
+      ENDED: "ended"
+    };
+
+    let currentState = STATES.PREPARING;
+    let mediaStream = null;
+    let audioContext = null;
+    let analyser = null;
+    let source = null;
+    let animationId = null;
+    let totalSeconds = 0;
+    let totalTimer = null;
+    let speechSeconds = 0;
+    let speechTimer = null;
+    let recognition = null;
+    let usingSpeechRecognition = false;
+    let isMuted = false;
+    let isPaused = false;
+    let transcriptSeedIndex = 0;
+
+    const transcriptSeeds = [
+      "Hi, I'm Vansh, and I enjoy building AI-powered products that solve practical user problems.",
+      "Recently I've been working on backend systems, full stack interfaces, and interview-focused AI experiences.",
+      "I like turning rough ideas into polished products with real-time feedback and clear user flows.",
+      "I also enjoy hackathons because they force fast thinking, iteration, and strong product decisions."
+    ];
+
+    const aiQuestions = [
+      "Tell me about yourself.",
+      "Can you walk me through a project you're proud of?",
+      "Interesting. Can you elaborate on the decisions you made there?"
+    ];
+
+    function formatTime(total) {
+      const m = String(Math.floor(total / 60)).padStart(2, "0");
+      const s = String(total % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function startGlobalTimer() {
+      timer.textContent = formatTime(totalSeconds);
+      totalTimer = setInterval(() => {
+        if (!isPaused && currentState !== STATES.ENDED) {
+          totalSeconds += 1;
+          timer.textContent = formatTime(totalSeconds);
+        }
+      }, 1000);
+    }
+
+    function startSpeechTimer() {
+      clearInterval(speechTimer);
+      speechSeconds = 0;
+      speechTimerPill.textContent = `⏱ ${formatTime(speechSeconds)}`;
+      speechTimer = setInterval(() => {
+        if (!isPaused && currentState === STATES.USER) {
+          speechSeconds += 1;
+          speechTimerPill.textContent = `⏱ ${formatTime(speechSeconds)}`;
+        }
+      }, 1000);
+    }
+
+    function stopSpeechTimer() {
+      clearInterval(speechTimer);
+    }
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      const rect = waveCanvas.getBoundingClientRect();
+      waveCanvas.width = rect.width * ratio;
+      waveCanvas.height = rect.height * ratio;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function drawIdleWave(flat = false) {
+      const w = waveCanvas.clientWidth;
+      const h = waveCanvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(132,203,255,0.42)";
+      ctx.beginPath();
+
+      for (let x = 0; x <= w; x += 8) {
+        const amp = flat ? 1.5 : 4;
+        const y = h / 2 + Math.sin(x * 0.022) * amp;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+    }
+
+    function drawLiveWave() {
+      if (!analyser) {
+        drawIdleWave();
+        return;
+      }
+
+      const bufferLength = analyser.fftSize;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function render() {
+        animationId = requestAnimationFrame(render);
+        const w = waveCanvas.clientWidth;
+        const h = waveCanvas.clientHeight;
+
+        analyser.getByteTimeDomainData(dataArray);
+        ctx.clearRect(0, 0, w, h);
+
+        const bg = ctx.createLinearGradient(0, 0, 0, h);
+        bg.addColorStop(0, "rgba(255,255,255,0.02)");
+        bg.addColorStop(1, "rgba(255,255,255,0.00)");
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        const grad = ctx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, "#bde7ff");
+        grad.addColorStop(0.4, "#7ecbff");
+        grad.addColorStop(1, "#5bbcff");
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        let x = 0;
+        const sliceWidth = w / bufferLength;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = (v * h) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+      }
+
+      render();
+    }
+
+    function stopWaveAnimation() {
+      if (animationId) cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+
+    async function setupMedia() {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: true
+        });
+
+        video.srcObject = mediaStream;
+        video.style.display = "block";
+        camFallback.style.display = "none";
+        cameraState.textContent = "Candidate camera";
+
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioContext.createMediaStreamSource(mediaStream);
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048;
+        source.connect(analyser);
+      } catch (error) {
+        cameraState.textContent = "Camera unavailable";
+        camFallback.style.display = "grid";
+      }
+    }
+
+    function setupSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        usingSpeechRecognition = false;
+        return;
+      }
+
+      try {
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+        usingSpeechRecognition = true;
+
+        recognition.onresult = (event) => {
+          let interim = "";
+          let finalText = "";
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) finalText += transcript + " ";
+            else interim += transcript;
+          }
+
+          transcriptText.textContent = (finalText + interim).trim() || "Listening to your response...";
+        };
+
+        recognition.onerror = () => {
+          usingSpeechRecognition = false;
+        };
+      } catch (e) {
+        usingSpeechRecognition = false;
+      }
+    }
+
+    function startSpeechRecognition() {
+      if (usingSpeechRecognition && recognition) {
+        try { recognition.start(); } catch (e) {}
+      }
+    }
+
+    function stopSpeechRecognition() {
+      if (usingSpeechRecognition && recognition) {
+        try { recognition.stop(); } catch (e) {}
+      }
+    }
+
+    function fallbackTranscriptTick() {
+      if (currentState !== STATES.USER || isPaused) return;
+      transcriptText.textContent = transcriptSeeds[transcriptSeedIndex % transcriptSeeds.length];
+      transcriptSeedIndex += 1;
+    }
+
+    function showMetrics() {
+      metricCards.forEach((card, index) => {
+        setTimeout(() => card.classList.add("show"), 120 * index);
+      });
+    }
+
+    function resetMetrics() {
+      metricCards.forEach(card => card.classList.remove("show"));
+    }
+
+    function typeText(element, text, speed = 36) {
+      return new Promise(resolve => {
+        element.textContent = "";
+        let i = 0;
+
+        function tick() {
+          if (i <= text.length) {
+            element.textContent = text.slice(0, i);
+            i++;
+            setTimeout(tick, speed);
+          } else {
+            resolve();
+          }
+        }
+
+        tick();
+      });
+    }
+
+    function animateElement(el, keyframes, options) {
+      if (el.animate) return el.animate(keyframes, options);
+      return null;
+    }
+
+    function setState(state, options = {}) {
+      currentState = state;
+      app.className = "app";
+      app.classList.add(state);
+
+      if (state === STATES.PREPARING) {
+        app.classList.add("prepare-only", "camera-hidden", "ai-intro");
+      }
+
+      if (state === STATES.AI_INTRO) {
+        app.classList.add("ai-intro", "camera-hidden", "active-question");
+      }
+
+      if (state === STATES.AI_SPEAKING) {
+        app.classList.add("active-question");
+        if (!options.showRoom) app.classList.add("camera-hidden");
+      }
+
+      if (state === STATES.USER) {
+        app.classList.remove("camera-hidden");
+      }
+
+      if (state === STATES.THINKING) {
+        app.classList.remove("camera-hidden");
+      }
+
+      if (state === STATES.REPORT) {
+        app.classList.add("report");
+      }
+    }
+
+    async function runSequence() {
+      setState(STATES.PREPARING);
+      heroKicker.style.opacity = "0";
+      questionText.textContent = "Preparing your interviewer...";
+      subcopy.textContent = "Calibrating voice, personality, and interview flow.";
+      orbLabel.textContent = "Preparing your interviewer...";
+      timer.style.opacity = "0";
+
+      await wait(2000);
+
+      setState(STATES.AI_INTRO);
+      timer.style.opacity = "1";
+      heroKicker.style.opacity = "1";
+      heroKicker.style.transform = "translateY(0)";
+      heroKicker.textContent = "AI interviewer";
+      subcopy.textContent = "";
+      questionText.textContent = "";
+      orbLabel.textContent = "AI Interviewer";
+
+      await speakLines([
+        "Hello Vansh.",
+        "I'm going to conduct your interview today.",
+        "Take a deep breath.",
+        "Let's begin."
+      ], 1200, false);
+
+      await wait(400);
+
+      setState(STATES.AI_SPEAKING, { showRoom: true });
+      heroKicker.textContent = "Question 01";
+      orbLabel.textContent = "AI Interviewer";
+      subcopy.textContent = "Listen carefully, then respond naturally.";
+
+      animateSpeakerReveal();
+      await typeText(questionText, aiQuestions[0], 42);
+      await wait(700);
+
+      startUserRound();
+    }
+
+    function animateSpeakerReveal() {
+      app.classList.remove("camera-hidden");
+
+      animateElement(document.querySelector(".camera-wrap"), [
+        { opacity: 0, transform: "translateY(24px) scale(0.98)" },
+        { opacity: 1, transform: "translateY(0) scale(1)" }
+      ], { duration: 700, easing: "cubic-bezier(0.16,1,0.3,1)", fill: "forwards" });
+
+      animateElement(document.querySelector(".wave-zone"), [
+        { opacity: 0, transform: "translateY(22px)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ], { duration: 760, delay: 120, easing: "cubic-bezier(0.16,1,0.3,1)", fill: "forwards" });
+
+      animateElement(document.querySelector(".transcript"), [
+        { opacity: 0, transform: "translateY(18px)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ], { duration: 760, delay: 220, easing: "cubic-bezier(0.16,1,0.3,1)", fill: "forwards" });
+
+      animateElement(document.querySelector(".metrics"), [
+        { opacity: 0, transform: "translateY(18px)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ], { duration: 760, delay: 300, easing: "cubic-bezier(0.16,1,0.3,1)", fill: "forwards" });
+    }
+
+    async function speakLines(lines, gap = 1000, showQuestion = false) {
+      setState(showQuestion ? STATES.AI_SPEAKING : STATES.AI_INTRO, { showRoom: false });
+      statusMain.textContent = "AI is speaking...";
+      statusSub.textContent = "Listen carefully to the prompt.";
+      stopWaveAnimation();
+      drawIdleWave(true);
+
+      for (const line of lines) {
+        orbLabel.textContent = "Speaking...";
+        await typeText(questionText, line, 36);
+        await wait(gap);
+      }
+
+      orbLabel.textContent = "AI Interviewer";
+    }
+
+    function startUserRound() {
+      setState(STATES.USER);
+      statusMain.textContent = "Listening...";
+      statusSub.textContent = "The waveform reacts to your voice and live metrics update in real time.";
+      orbLabel.textContent = "Listening";
+      transcriptText.textContent = "Start speaking. Your response will appear here.";
+      showMetrics();
+      startSpeechTimer();
+      startSpeechRecognition();
+      stopWaveAnimation();
+      drawLiveWave();
+      beginMetricSimulation();
+    }
+
+    function beginMetricSimulation() {
+      let confidence = 78;
+      let wpm = 126;
+      let fillers = 1;
+      const eyeStates = ["Good", "Strong", "Steady", "Good"];
+      let eyeIndex = 0;
+
+      confidenceValue.textContent = `${confidence}%`;
+      wpmValue.textContent = `${wpm} WPM`;
+      eyeValue.textContent = eyeStates[eyeIndex];
+      fillerValue.textContent = `${fillers}`;
+      eyeContactPill.textContent = `👀 Eye contact: ${eyeStates[eyeIndex]}`;
+
+      window.metricInterval = setInterval(() => {
+        if (currentState !== STATES.USER || isPaused) return;
+
+        confidence = Math.max(68, Math.min(92, confidence + Math.floor(Math.random() * 7) - 3));
+        wpm = Math.max(118, Math.min(142, wpm + Math.floor(Math.random() * 9) - 4));
+
+        if (Math.random() > 0.76) fillers += 1;
+        eyeIndex = (eyeIndex + 1) % eyeStates.length;
+
+        confidenceValue.textContent = `${confidence}%`;
+        wpmValue.textContent = `${wpm} WPM`;
+        eyeValue.textContent = eyeStates[eyeIndex];
+        fillerValue.textContent = `${fillers}`;
+        eyeContactPill.textContent = `👀 Eye contact: ${eyeStates[eyeIndex]}`;
+      }, 1800);
+
+      window.transcriptInterval = setInterval(fallbackTranscriptTick, 3200);
+    }
+
+    async function goThinking() {
+      clearInterval(window.metricInterval);
+      clearInterval(window.transcriptInterval);
+      stopSpeechTimer();
+      stopSpeechRecognition();
+
+      setState(STATES.THINKING);
+      statusMain.textContent = "Analyzing your answer...";
+      statusSub.textContent = "Speech input paused while the interviewer thinks.";
+      orbLabel.textContent = "Thinking...";
+      stopWaveAnimation();
+      drawIdleWave(true);
+      thinkingOverlay.classList.add("show");
+
+      await wait(2800);
+
+      thinkingOverlay.classList.remove("show");
+      await wait(300);
+
+      setState(STATES.AI_SPEAKING, { showRoom: true });
+      heroKicker.textContent = "Follow-up";
+      subcopy.textContent = "A deeper follow-up is ready.";
+      await speakLines([
+        "Interesting.",
+        "Can you elaborate on the decisions you made there?"
+      ], 1100, true);
+
+      await wait(500);
+      questionText.textContent = aiQuestions[2];
+      startUserRound();
+
+      setTimeout(async () => {
+        if (currentState === STATES.USER) {
+          await goToReport();
+        }
+      }, 9000);
+    }
+
+    async function goToReport() {
+      clearInterval(window.metricInterval);
+      clearInterval(window.transcriptInterval);
+      stopSpeechRecognition();
+      stopSpeechTimer();
+      stopWaveAnimation();
+      setState(STATES.REPORT);
+      statusMain.textContent = "Generating report...";
+      statusSub.textContent = "Transforming this session into a performance summary.";
+      reportScreen.classList.add("show");
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function toggleMute() {
+      if (!mediaStream) return;
+      isMuted = !isMuted;
+      mediaStream.getAudioTracks().forEach(track => track.enabled = !isMuted);
+      muteBtn.style.opacity = isMuted ? "0.65" : "1";
+      statusSub.textContent = isMuted ? "Microphone muted." : currentState === STATES.USER
+        ? "The waveform reacts to your voice and live metrics update in real time."
+        : statusSub.textContent;
+    }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      pauseBtn.style.opacity = isPaused ? "0.65" : "1";
+      statusMain.textContent = isPaused ? "Interview paused." :
+        currentState === STATES.USER ? "Listening..." :
+        currentState === STATES.THINKING ? "Analyzing your answer..." :
+        "AI is speaking...";
+    }
+
+    function leaveInterview() {
+      clearInterval(totalTimer);
+      clearInterval(speechTimer);
+      clearInterval(window.metricInterval);
+      clearInterval(window.transcriptInterval);
+      stopSpeechRecognition();
+      stopWaveAnimation();
+
+      if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
+      if (audioContext && audioContext.state !== "closed") audioContext.close();
+
+      setState(STATES.ENDED);
+      questionText.textContent = "Interview ended.";
+      subcopy.textContent = "The session has been closed.";
+      orbLabel.textContent = "Session complete";
+      statusMain.textContent = "Interview ended.";
+      statusSub.textContent = "You can now review your report.";
+      camFallback.style.display = "grid";
+      video.style.display = "none";
+      reportScreen.classList.add("show");
+
+      [muteBtn, pauseBtn, leaveBtn].forEach(btn => btn.disabled = true);
+    }
+
+    muteBtn.addEventListener("click", toggleMute);
+    pauseBtn.addEventListener("click", togglePause);
+    leaveBtn.addEventListener("click", leaveInterview);
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      if (!analyser || currentState !== STATES.USER) drawIdleWave(currentState === STATES.THINKING);
+    });
+
+    async function init() {
+      resizeCanvas();
+      drawIdleWave(true);
+      startGlobalTimer();
+      await setupMedia();
+      setupSpeechRecognition();
+      runSequence();
+
+      setTimeout(async () => {
+        if (currentState === STATES.USER) {
+          await goThinking();
+        }
+      }, 15000);
+    }
+
+    init();
+  </script>
+</body>
+</html>
