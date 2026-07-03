@@ -265,16 +265,150 @@
         linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));
     }
 
-    .interviewer-avatar {
-      width: 104px;
-      height: 104px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 32% 28%, rgba(255,255,255,0.92), rgba(131,182,255,0.34) 28%, rgba(131,182,255,0.12) 54%, transparent 72%),
-        #11161e;
-      border: 1px solid var(--line-strong);
-      opacity: 0.98;
-    }
+    .avatar-shell {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.interviewer-avatar {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  animation: avatarBreath 5.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.avatar-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255,255,255,0.96), rgba(131,182,255,0.34) 28%, rgba(131,182,255,0.12) 54%, transparent 72%),
+    #11161e;
+  border: 1px solid var(--line-strong);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 0 34px rgba(131,182,255,0.10),
+    0 18px 44px rgba(0,0,0,0.34);
+  animation: avatarGlow 4.8s ease-in-out infinite;
+}
+
+.avatar-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+}
+
+.wave-base {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+  stroke-width: 1;
+}
+
+.wave-path {
+  fill: none;
+  stroke: rgba(131,182,255,0.72);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url(#waveGlow);
+  opacity: 0.34;
+  transition: opacity 240ms var(--ease);
+}
+
+.avatar-ripple {
+  position: absolute;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  border: 1px solid rgba(131,182,255,0.14);
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+.avatar-shell.speaking .avatar-ripple {
+  animation: rippleOut 1.9s ease-out infinite;
+}
+
+.avatar-shell.speaking .ripple-2 {
+  animation-delay: 0.55s;
+}
+
+.avatar-shell.speaking .wave-path {
+  opacity: 0.82;
+}
+
+.avatar-shell.listening .wave-path {
+  opacity: 0.22;
+}
+
+.avatar-shell.speaking .interviewer-avatar {
+  animation: avatarSpeakFloat 2.1s ease-in-out infinite;
+}
+
+.avatar-shell.listening .interviewer-avatar {
+  animation: avatarBreath 5.6s ease-in-out infinite;
+}
+
+@keyframes avatarBreath {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.018);
+  }
+}
+
+@keyframes avatarSpeakFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1.01);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.035);
+  }
+}
+
+@keyframes avatarGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.02),
+      0 0 34px rgba(131,182,255,0.10),
+      0 18px 44px rgba(0,0,0,0.34);
+    filter: saturate(0.96);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      0 0 46px rgba(131,182,255,0.16),
+      0 18px 50px rgba(0,0,0,0.38);
+    filter: saturate(1.04);
+  }
+}
+
+@keyframes rippleOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  20% {
+    opacity: 0.26;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
 
     .interviewer-name {
       color: var(--muted);
@@ -711,3 +845,152 @@
         transition-duration: 0.01ms !important;
       }
     }
+    .avatar-shell {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.interviewer-avatar {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  animation: avatarBreath 5.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.avatar-photo-wrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0f141b;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 12px 36px rgba(0,0,0,0.34),
+    0 0 28px rgba(131,182,255,0.08);
+}
+
+.avatar-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 22%;
+  transform: scale(1.04);
+  filter: saturate(0.96) contrast(1.04) brightness(0.96);
+}
+
+.avatar-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255,255,255,0.24), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,0.06), transparent 38%, rgba(0,0,0,0.18));
+  pointer-events: none;
+}
+
+.avatar-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+}
+
+.wave-base {
+  fill: none;
+  stroke: rgba(255,255,255,0.045);
+  stroke-width: 1;
+}
+
+.wave-path {
+  fill: none;
+  stroke: rgba(131,182,255,0.7);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url(#waveGlow);
+  opacity: 0.3;
+  transition: opacity 220ms ease;
+}
+
+.avatar-ripple {
+  position: absolute;
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  border: 1px solid rgba(131,182,255,0.14);
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+.avatar-shell.speaking .avatar-ripple {
+  animation: rippleOut 1.9s ease-out infinite;
+}
+
+.avatar-shell.speaking .ripple-2 {
+  animation-delay: 0.55s;
+}
+
+.avatar-shell.speaking .wave-path {
+  opacity: 0.84;
+}
+
+.avatar-shell.listening .wave-path {
+  opacity: 0.18;
+}
+
+.avatar-shell.speaking .interviewer-avatar {
+  animation: avatarSpeakFloat 2s ease-in-out infinite;
+}
+
+.avatar-shell.listening .interviewer-avatar {
+  animation: avatarBreath 5.8s ease-in-out infinite;
+}
+
+.avatar-shell.speaking .avatar-photo {
+  filter: saturate(1) contrast(1.06) brightness(1);
+}
+
+@keyframes avatarBreath {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.015);
+  }
+}
+
+@keyframes avatarSpeakFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1.01);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.028);
+  }
+}
+
+@keyframes rippleOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  20% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.52);
+  }
+}

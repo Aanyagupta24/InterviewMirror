@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=general-sans@500,600,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/interview.css" />
+  <link rel="stylesheet" href="css/interview1.css" />
 </head>
 <body>
   <div class="app">
@@ -42,7 +42,39 @@
       <div class="room-main">
         <div class="interviewer-panel">
           <div class="interviewer-stage">
-            <div class="interviewer-avatar"></div>
+            <div class="avatar-shell listening" id="avatarShell" aria-label="Sarah, AI interviewer">
+  <div class="avatar-ripple ripple-1"></div>
+  <div class="avatar-ripple ripple-2"></div>
+
+  <svg class="avatar-wave" viewBox="0 0 220 220" aria-hidden="true">
+    <defs>
+      <filter id="waveGlow">
+        <feGaussianBlur stdDeviation="2.2" result="blur"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="blur"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <circle class="wave-base" cx="110" cy="110" r="84"></circle>
+    <path id="wavePath" class="wave-path"></path>
+  </svg>
+
+  <div class="interviewer-avatar">
+    <div class="avatar-photo-wrap">
+      <img
+        src="https://user-gen-media-assets.s3.amazonaws.com/seedream_images/84bc2d28-991e-49c2-8263-7d8c40d4d15e.png"
+        alt="AI interviewer portrait"
+        class="avatar-photo"
+        width="140"
+        height="140"
+        loading="lazy"
+      />
+      <div class="avatar-shine"></div>
+    </div>
+  </div>
+</div>
             <div class="interviewer-name">Sarah · Interviewer</div>
 
             <div class="question-wrap">
@@ -201,6 +233,6 @@
     </section>
   </div>
 
-  <script src="js/interview.js"></script>
+  <script src="js/interview1.js"></script>
 </body>
 </html>
