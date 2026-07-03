@@ -1,15 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InterviewMirror</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterviewMirror — Practice interviews that feel real</title>
+  <meta
+    name="description"
+    content="InterviewMirror helps you practice realistic interviews with AI-powered simulations, structured feedback, and measurable progress tracking."
+  />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    
-    <script src="js/main.js"></script>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container">
+      <nav class="navbar" aria-label="Primary navigation">
+        <a href="#" class="brand" aria-label="InterviewMirror home">
+          <span class="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="8" width="48" height="48" rx="14" fill="#181C25" stroke="#2B3242"/>
+              <path d="M23 18C23 15.7909 24.7909 14 27 14H29.5C31.7091 14 33.5 15.7909 33.5 18V46C33.5 48.2091 31.7091 50 29.5 50H27C24.7909 50 23 48.2091 23 46V18Z" fill="#4F8CFF"/>
+              <path d="M36.5 23C36.5 21.3431 37.8431 20 39.5 20C41.1569 20 42.5 21.3431 42.5 23V41C42.5 42.6569 41.1569 44 39.5 44C37.8431 44 36.5 42.6569 36.5 41V23Z" fill="#F8F9FA" fill-opacity="0.72"/>
+              <path d="M18 48.5C22.8333 43.8333 27.8333 41.5 33 41.5C38.5 41.5 43.1667 43.1667 47 46.5" stroke="#A8B0C0" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="brand-text">InterviewMirror</span>
+        </a>
+
+        <div class="nav-links" id="desktopNav">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#about">About</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="#signin" class="nav-link-button">Sign In</a>
+          <a href="#get-started" class="btn btn-primary">Get Started</a>
+          <button
+            class="menu-toggle"
+            id="menuToggle"
+            aria-label="Toggle menu"
+            aria-controls="mobileMenu"
+            aria-expanded="false"
+            type="button"
+          >
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#about">About</a>
+        <a href="#signin">Sign In</a>
+        <a href="#get-started" class="btn btn-primary mobile-cta">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <div class="hero-badge">AI-powered interview practice</div>
+          <h1>Practice interviews that feel real.</h1>
+          <p class="hero-description">
+            Practice realistic interviews with AI that asks follow-up questions, evaluates your communication, and gives actionable feedback so you're better prepared for the real interview.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#get-started" class="btn btn-primary btn-large">Start Practicing</a>
+            <a href="#how-it-works" class="btn btn-secondary btn-large">Learn More</a>
+          </div>
+        </div>
+
+        <div class="hero-preview" aria-label="Interview room preview">
+          <div class="preview-window">
+            <div class="preview-topbar">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="preview-label">Interview session preview</div>
+            </div>
+
+            <div class="preview-content">
+              <div class="preview-left">
+                <div class="preview-panel large-panel">
+                  <span class="panel-label">Question</span>
+                  <h3>Tell me about a time you handled a difficult situation.</h3>
+                </div>
+
+                <div class="preview-panel response-panel">
+                  <span class="panel-label">Live response</span>
+                  <div class="wave-bars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="preview-right">
+                <div class="preview-card">
+                  <span class="panel-label">Speaking Pace</span>
+                  <strong>82%</strong>
+                </div>
+                <div class="preview-card">
+                  <span class="panel-label">Response Time</span>
+                  <strong>Strong</strong>
+                </div>
+                <div class="preview-card">
+                  <span class="panel-label">Eye Contact</span>
+                  <strong>Low</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features section" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">Features</span>
+          <h2>Focused tools for better interview performance.</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">🎤</div>
+            <h3>Real Conversations</h3>
+            <p>
+              Adaptive AI interviewers ask follow-up questions based on your responses.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Detailed Feedback</h3>
+            <p>
+              Receive communication insights, strengths, and areas to improve.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Track Progress</h3>
+            <p>
+              Measure improvement across multiple interview sessions.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading narrow">
+          <span class="section-label">How It Works</span>
+          <h2>A simple system that helps you improve faster.</h2>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-number">01</span>
+            <h3>Start a session</h3>
+            <p>Choose an interview type and begin a realistic mock interview flow.</p>
+          </article>
+
+          <article class="step-card">
+            <span class="step-number">02</span>
+            <h3>Respond naturally</h3>
+            <p>Answer spoken questions while the platform listens for delivery patterns.</p>
+          </article>
+
+          <article class="step-card">
+            <span class="step-number">03</span>
+            <h3>Review feedback</h3>
+            <p>See structured feedback on communication, clarity, and confidence.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about section" id="about">
+      <div class="container about-panel">
+        <div>
+          <span class="section-label">About</span>
+          <h2>Built for students who want interview practice to feel serious.</h2>
+        </div>
+        <p>
+          InterviewMirror is designed to feel like modern software: calm, clear, and focused on performance improvement instead of flashy AI effects.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta section" id="get-started">
+      <div class="container">
+        <div class="cta-panel">
+          <div>
+            <span class="section-label">Get Started</span>
+            <h2>Start practicing with a system built to improve real interview outcomes.</h2>
+          </div>
+
+          <div class="cta-actions">
+            <a href="#" class="btn btn-primary btn-large">Start Practicing</a>
+            <a href="#features" class="btn btn-secondary btn-large">Explore Features</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-brand">InterviewMirror</div>
+      <div class="footer-links">
+        <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="#" target="_blank" rel="noopener noreferrer">Privacy</a>
+        <a href="#" target="_blank" rel="noopener noreferrer">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
