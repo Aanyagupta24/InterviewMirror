@@ -42,6 +42,30 @@ const transcriptLines = [
   "For me, good software is not just functional — it should also feel intentional and calm to use."
 ];
 
+async function getAIQuestion(prompt) {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/api/interview/question",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: prompt
+        })
+      }
+    );
+
+    const data = await response.json();
+    return data.response;
+
+  } catch (error) {
+    console.error(error);
+    return "Sorry, I couldn't generate a question.";
+  }
+}
+
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -148,6 +172,8 @@ function startLiveTranscript() {
     if (index < transcriptLines.length && liveTranscript) {
       liveTranscript.textContent = transcriptLines[index];
       index += 1;
+    } else {
+      clearInterval(transcriptTimer);
     }
   }, 3000);
 }
@@ -248,13 +274,20 @@ async function runSequence() {
     startLiveTranscript();
 
     await wait(1800);
-    setAvatarState("speaking");
-    if (questionText) {
-      questionText.textContent = "Tell me about yourself.";
-    }
 
-    await wait(2200);
-    setAvatarState("listening");
+setAvatarState("speaking");
+
+const firstQuestion = await getAIQuestion(
+  "Ask exactly one professional Java interview question. Return only the question."
+);
+
+if (questionText) {
+  questionText.textContent = firstQuestion;
+}
+
+await wait(2200);
+
+setAvatarState("listening");
 
     await wait(7000);
     simulateThinkingThenFollowup();
@@ -312,18 +345,3 @@ if (avatarShell && wavePath) {
 }
 
 runSequence();
-
-function startLiveTranscript() {
-  let index = 0;
-  if (liveTranscript) liveTranscript.textContent = "";
-
-  clearInterval(transcriptTimer);
-  transcriptTimer = setInterval(() => {
-    if (index < transcriptLines.length && liveTranscript) {
-      liveTranscript.textContent = transcriptLines[index];
-      index += 1;
-    } else {
-      clearInterval(transcriptTimer);
-    }
-  }, 3000);
-}
