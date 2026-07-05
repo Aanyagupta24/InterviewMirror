@@ -1,5 +1,6 @@
 package com.interviewmirror.backend.controller;
 
+import com.interviewmirror.backend.model.AnswerRequest;
 import com.interviewmirror.backend.dto.StartInterviewRequest;
 import com.interviewmirror.backend.dto.StartInterviewResponse;
 import com.interviewmirror.backend.service.InterviewService;
@@ -26,4 +27,15 @@ public class InterviewController {
 
         return new StartInterviewResponse(question);
     }
+
+    @PostMapping("/next")
+public StartInterviewResponse nextQuestion(
+        @RequestBody AnswerRequest request) {
+
+    String question = interviewService.nextQuestion(
+            request.getQuestion(),
+            request.getAnswer());
+
+    return new StartInterviewResponse(question);
+}
 }

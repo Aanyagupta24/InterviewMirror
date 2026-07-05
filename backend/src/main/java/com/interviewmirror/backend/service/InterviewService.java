@@ -27,4 +27,26 @@ public class InterviewService {
 
         return ollamaService.generateQuestion(prompt);
     }
+
+    public String nextQuestion(String previousQuestion, String answer) {
+
+    String prompt = """
+            You are a professional technical interviewer.
+
+            The previous interview question was:
+            %s
+
+            The candidate answered:
+            %s
+
+            Ask ONE natural follow-up interview question based on the candidate's answer.
+
+            Do not evaluate.
+            Do not explain.
+            Return only the next interview question.
+            """
+            .formatted(previousQuestion, answer);
+
+    return ollamaService.generateQuestion(prompt);
+}
 }

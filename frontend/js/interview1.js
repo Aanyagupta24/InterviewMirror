@@ -30,6 +30,11 @@ let timer = null;
 let transcriptTimer = null;
 let thinkingTimer = null;
 
+let currentQuestion = "";
+
+let interviewRunning = true;
+let answerTimeout = null;
+
 let recognition = null;
 let isListening = false;
 
@@ -68,6 +73,36 @@ async function getAIQuestion(role, experience) {
     console.error(error);
     return "Sorry, I couldn't generate a question.";
   }
+}
+
+async function getNextAIQuestion(previousQuestion, answer) {
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:8080/api/interview/next",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    question: previousQuestion,
+                    answer: answer
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        return data.question;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return "Sorry, I couldn't generate the next question.";
+    }
 }
 
 function wait(ms) {
@@ -160,13 +195,24 @@ function startSpeechRecognition() {
   };
 
   recognition.onerror = (event) => {
-    console.error(event.error);
-  };
+
+    console.log("Speech Error:", event.error);
+
+    if (event.error !== "aborted") {
+        recognition.stop();
+    }
+};
 
   recognition.onend = () => {
+    console.log("Speech Recognition ended");
+
     isListening = false;
-    console.log("Stopped listening");
-  };
+
+    if (interviewRunning) {
+        console.log("Restarting Speech Recognition...");
+        recognition.start();
+    }
+};
 
   recognition.start();
 }
@@ -228,36 +274,49 @@ function startLiveTranscript() {
   }, 3000);
 }
 
-function simulateThinkingThenFollowup() {
-  clearTimeout(thinkingTimer);
+async function continueInterview() {
 
-  thinkingTimer = setTimeout(async () => {
+    if (!interviewRunning) return;
+
     setAvatarState("listening");
 
+    // Give the candidate time to answer
+    await wait(10000);
+
+    if (!interviewRunning) return;
+
     if (thinkingText) {
-      thinkingText.classList.add("show");
-      thinkingText.textContent = "Thinking...";
+        thinkingText.classList.add("show");
+        thinkingText.textContent = "Thinking...";
     }
 
-    await wait(3000);
+    await wait(2500);
 
     if (thinkingText) {
-      thinkingText.classList.remove("show");
+        thinkingText.classList.remove("show");
     }
 
     setAvatarState("speaking");
 
+    const nextQuestion = await getNextAIQuestion(
+        currentQuestion,
+        liveTranscript.textContent
+    );
+
+    currentQuestion = nextQuestion;
+
     if (questionText) {
-      questionText.textContent = "Interesting. Why did you choose React for that project?";
+        questionText.textContent = nextQuestion;
     }
 
     if (liveTranscript) {
-      liveTranscript.textContent = "Your next answer appears here while you speak.";
+        liveTranscript.textContent = "";
     }
 
-    await wait(2200);
-    setAvatarState("listening");
-  }, 9000);
+    await wait(2500);
+
+    // Repeat forever until End Interview
+    continueInterview();
 }
 
 function stopMedia() {
@@ -268,6 +327,9 @@ function stopMedia() {
 }
 
 function endInterview() {
+  interviewRunning = false;
+
+clearTimeout(answerTimeout);
   clearInterval(timer);
   clearInterval(transcriptTimer);
   clearTimeout(thinkingTimer);
@@ -333,6 +395,8 @@ const firstQuestion = await getAIQuestion(
     "2 years"
 );
 
+currentQuestion = firstQuestion;
+
 if (questionText) {
     questionText.textContent = firstQuestion;
 }
@@ -342,7 +406,7 @@ await wait(2200);
 setAvatarState("listening");
 
     await wait(7000);
-    simulateThinkingThenFollowup();
+continueInterview();
   } catch (error) {
     console.error("runSequence failed:", error);
     if (connectStatus) {
