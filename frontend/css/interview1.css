@@ -431,13 +431,13 @@
       text-transform: uppercase;
     }
 
-    .question-text {
+     {
       font-family: var(--font-display);
       font-size: clamp(2rem, 1.3rem + 2.2vw, 4rem);
       letter-spacing: -0.055em;
       line-height: 0.98;
       text-wrap: balance;
-    }
+    }.question-text
 
     .thinking-text {
       color: var(--muted);

@@ -1,238 +1,376 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InterviewMirror – Interview Room</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InterviewMirror – Interview Room</title>
 
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=general-sans@500,600,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/interview1.css" />
-</head>
-<body>
-  <div class="app">
-    <section class="screen connect-screen active" id="connectScreen">
-      <div class="connect-box">
-        <div class="connect-title">Connecting to interviewer...</div>
-        <div class="connect-sub">Establishing secure interview session.</div>
-        <div class="connect-status" id="connectStatus"></div>
-      </div>
-    </section>
-
-    <section class="screen intro-screen" id="introScreen">
-      <div class="intro-wrap">
-        <div class="ai-avatar" id="introAvatar"></div>
-        <div class="intro-copy">
-          <div class="intro-line" id="introLine1">Good afternoon, Vansh.</div>
-          <div class="intro-line" id="introLine2">I'm Sarah.</div>
-          <div class="intro-line" id="introLine3">I'll be conducting today's interview.</div>
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=general-sans@500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/interview1.css" />
+  </head>
+  <body>
+    <div class="app">
+      <section class="screen connect-screen active" id="connectScreen">
+        <div class="connect-box">
+          <div class="connect-title">Connecting to interviewer...</div>
+          <div class="connect-sub">Establishing secure interview session.</div>
+          <div class="connect-status" id="connectStatus"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="room-screen" id="roomScreen">
-      <div class="room-topbar">
-        <div class="brand">InterviewMirror</div>
-        <div class="meeting-state">
-          <span class="meeting-dot"></span>
-          Live interview session
+      <section class="screen intro-screen" id="introScreen">
+        <div class="intro-wrap">
+          <div class="ai-avatar" id="introAvatar"></div>
+          <div class="intro-copy">
+            <div class="intro-line" id="introLine1">Good afternoon, Vansh.</div>
+            <div class="intro-line" id="introLine2">I'm Sarah.</div>
+            <div class="intro-line" id="introLine3">
+              I'll be conducting today's interview.
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="room-main">
-        <div class="interviewer-panel">
-          <div class="interviewer-stage">
-            <div class="avatar-shell listening" id="avatarShell" aria-label="Sarah, AI interviewer">
-  <div class="avatar-ripple ripple-1"></div>
-  <div class="avatar-ripple ripple-2"></div>
+      <section class="room-screen" id="roomScreen">
+        <div class="room-topbar">
+          <div class="brand">InterviewMirror</div>
+          <div class="meeting-state">
+            <span class="meeting-dot"></span>
+            Live interview session
+          </div>
+        </div>
 
-  <svg class="avatar-wave" viewBox="0 0 220 220" aria-hidden="true">
-    <defs>
-      <filter id="waveGlow">
-        <feGaussianBlur stdDeviation="2.2" result="blur"></feGaussianBlur>
-        <feMerge>
-          <feMergeNode in="blur"></feMergeNode>
-          <feMergeNode in="SourceGraphic"></feMergeNode>
-        </feMerge>
-      </filter>
-    </defs>
+        <div class="room-main">
+          <div class="interviewer-panel">
+            <div class="interviewer-stage">
+              <div
+                class="avatar-shell listening"
+                id="avatarShell"
+                aria-label="Sarah, AI interviewer"
+              >
+                <div class="avatar-ripple ripple-1"></div>
+                <div class="avatar-ripple ripple-2"></div>
 
-    <circle class="wave-base" cx="110" cy="110" r="84"></circle>
-    <path id="wavePath" class="wave-path"></path>
-  </svg>
+                <svg
+                  class="avatar-wave"
+                  viewBox="0 0 220 220"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <filter id="waveGlow">
+                      <feGaussianBlur
+                        stdDeviation="2.2"
+                        result="blur"
+                      ></feGaussianBlur>
+                      <feMerge>
+                        <feMergeNode in="blur"></feMergeNode>
+                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                      </feMerge>
+                    </filter>
+                  </defs>
 
-  <div class="interviewer-avatar">
-    <div class="avatar-photo-wrap">
-      <img
-        src="https://user-gen-media-assets.s3.amazonaws.com/seedream_images/84bc2d28-991e-49c2-8263-7d8c40d4d15e.png"
-        alt="AI interviewer portrait"
-        class="avatar-photo"
-        width="140"
-        height="140"
-        loading="lazy"
-      />
-      <div class="avatar-shine"></div>
+                  <circle class="wave-base" cx="110" cy="110" r="84"></circle>
+                  <path id="wavePath" class="wave-path"></path>
+                </svg>
+
+                <div class="interviewer-avatar">
+                  <div class="avatar-photo-wrap">
+                    <img
+                      src="https://user-gen-media-assets.s3.amazonaws.com/seedream_images/84bc2d28-991e-49c2-8263-7d8c40d4d15e.png"
+                      alt="AI interviewer portrait"
+                      class="avatar-photo"
+                      width="140"
+                      height="140"
+                      loading="lazy"
+                    />
+                    <div class="avatar-shine"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="interviewer-name">Sarah · Interviewer</div>
+
+              <div class="question-wrap">
+                <div class="question-label">Current question</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="thinking-text" id="thinkingText">Thinking...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="self-column">
+            <div class="self-panel">
+              <div class="self-header">Your camera</div>
+              <video
+                id="selfVideo"
+                class="self-video"
+                autoplay
+                muted
+                playsinline
+              ></video>
+
+              <div class="self-placeholder" id="selfPlaceholder">
+                <div class="self-placeholder-inner">
+                  <div class="camera-icon">
+                    <svg
+                      width="26"
+                      height="26"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M15 10l4.553 -2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1 -1.447 .894L15 14"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <rect
+                        x="3"
+                        y="6"
+                        width="12"
+                        height="12"
+                        rx="2"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      />
+                    </svg>
+                  </div>
+                  <div>Waiting for camera feed...</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tiny-status">
+              <div class="tiny-pill">Listening...</div>
+              <div class="tiny-pill">
+                <span class="recording-dot"></span> Recording
+              </div>
+              <div class="tiny-pill" id="elapsedTime">00:00</div>
+            </div>
+
+            <div class="transcript-panel">
+              <div class="transcript-label">Live response</div>
+              <div class="transcript-live" id="liveTranscript">
+                Your answer appears here while you speak.
+              </div>
+            </div>
+
+            <div class="room-controls">
+              <button
+                class="control-btn"
+                id="micBtn"
+                aria-label="Toggle microphone"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="9"
+                    y="3"
+                    width="6"
+                    height="11"
+                    rx="3"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span class="tooltip">Mute</span>
+              </button>
+
+              <button
+                class="control-btn"
+                id="camBtn"
+                aria-label="Toggle camera"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M15 10l4.553 -2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1 -1.447 .894L15 14"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <rect
+                    x="3"
+                    y="6"
+                    width="12"
+                    height="12"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                </svg>
+                <span class="tooltip">Camera</span>
+              </button>
+
+              <button
+                class="control-btn end"
+                id="endBtn"
+                aria-label="End interview"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M15 12H3M10 7l-5 5 5 5M21 5v14"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span class="tooltip">End interview</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="report-screen" id="reportScreen">
+        <div class="report-wrap">
+          <div class="report-head">
+            <div>
+              <div class="report-title">Interview Report</div>
+              <div class="report-sub">
+                Evaluation shown only after the conversation ends.
+              </div>
+            </div>
+
+            <div class="report-actions">
+              <button class="action-btn">Download report</button>
+              <button class="action-btn" id="restartBtn">
+                Start new interview
+              </button>
+            </div>
+          </div>
+
+          <div class="report-grid">
+            <div class="card metric-card">
+              <div class="card-label">Overall score</div>
+              <div class="card-value">84/100</div>
+              <div class="card-note">
+                Strong clarity and calm delivery, with room to add more
+                specificity in examples.
+              </div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="card-label">Confidence</div>
+              <div class="card-value">82%</div>
+              <div class="card-note">
+                Voice sounded steady for most of the response.
+              </div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="card-label">Eye contact</div>
+              <div class="card-value">Good</div>
+              <div class="card-note">
+                Mostly camera-facing, with brief downward glances.
+              </div>
+            </div>
+
+            <div class="card wide-card">
+              <div class="card-label">Filler words</div>
+              <div class="card-value">3</div>
+              <div class="card-note">
+                A few hesitation markers were detected, but they did not heavily
+                disrupt clarity.
+              </div>
+            </div>
+
+            <div class="card wide-card">
+              <div class="card-label">Timeline</div>
+              <div class="timeline">
+                <div class="timeline-row">
+                  <div class="timeline-time">00:00</div>
+                  <div class="timeline-copy">
+                    Interview connected. Sarah introduced the session.
+                  </div>
+                </div>
+                <div class="timeline-row">
+                  <div class="timeline-time">00:18</div>
+                  <div class="timeline-copy">
+                    Question 1 started: “Tell me about yourself.”
+                  </div>
+                </div>
+                <div class="timeline-row">
+                  <div class="timeline-time">02:18</div>
+                  <div class="timeline-copy">
+                    Candidate response completed. AI paused before follow-up.
+                  </div>
+                </div>
+                <div class="timeline-row">
+                  <div class="timeline-time">02:21</div>
+                  <div class="timeline-copy">
+                    Follow-up asked: “Why did you choose React for that
+                    project?”
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card full-card">
+              <div class="card-label">Transcript</div>
+              <div class="transcript-report">
+                <div class="transcript-entry">
+                  <div class="transcript-speaker">Sarah</div>
+                  <div>
+                    Good afternoon, Vansh. I'm Sarah. I'll be conducting today's
+                    interview.
+                  </div>
+                </div>
+                <div class="transcript-entry">
+                  <div class="transcript-speaker">Sarah</div>
+                  <div>Tell me about yourself.</div>
+                </div>
+                <div class="transcript-entry">
+                  <div class="transcript-speaker">You</div>
+                  <div>
+                    Hi, I'm Vansh. I enjoy building AI-powered products that
+                    feel practical and useful. Recently I've been working on
+                    full stack systems and interview-focused experiences that
+                    combine backend intelligence with clean user interaction.
+                  </div>
+                </div>
+                <div class="transcript-entry">
+                  <div class="transcript-speaker">Sarah</div>
+                  <div>
+                    Interesting. Why did you choose React for that project?
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-</div>
-            <div class="interviewer-name">Sarah · Interviewer</div>
 
-            <div class="question-wrap">
-              <div class="question-label">Current question</div>
-              <div class="question-text" id="questionText">Tell me about yourself.</div>
-              <div class="thinking-text" id="thinkingText">Thinking...</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="self-column">
-          <div class="self-panel">
-            <div class="self-header">Your camera</div>
-            <video id="selfVideo" class="self-video" autoplay muted playsinline></video>
-
-            <div class="self-placeholder" id="selfPlaceholder">
-              <div class="self-placeholder-inner">
-                <div class="camera-icon">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M15 10l4.553 -2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1 -1.447 .894L15 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <rect x="3" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/>
-                  </svg>
-                </div>
-                <div>Waiting for camera feed...</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tiny-status">
-            <div class="tiny-pill">Listening...</div>
-            <div class="tiny-pill"><span class="recording-dot"></span> Recording</div>
-            <div class="tiny-pill" id="elapsedTime">00:00</div>
-          </div>
-
-          <div class="transcript-panel">
-            <div class="transcript-label">Live response</div>
-            <div class="transcript-live" id="liveTranscript">
-              Your answer appears here while you speak.
-            </div>
-          </div>
-
-          <div class="room-controls">
-            <button class="control-btn" id="micBtn" aria-label="Toggle microphone">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-              <span class="tooltip">Mute</span>
-            </button>
-
-            <button class="control-btn" id="camBtn" aria-label="Toggle camera">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 10l4.553 -2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1 -1.447 .894L15 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="3" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              </svg>
-              <span class="tooltip">Camera</span>
-            </button>
-
-            <button class="control-btn end" id="endBtn" aria-label="End interview">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 12H3M10 7l-5 5 5 5M21 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span class="tooltip">End interview</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="report-screen" id="reportScreen">
-      <div class="report-wrap">
-        <div class="report-head">
-          <div>
-            <div class="report-title">Interview Report</div>
-            <div class="report-sub">Evaluation shown only after the conversation ends.</div>
-          </div>
-
-          <div class="report-actions">
-            <button class="action-btn">Download report</button>
-            <button class="action-btn" id="restartBtn">Start new interview</button>
-          </div>
-        </div>
-
-        <div class="report-grid">
-          <div class="card metric-card">
-            <div class="card-label">Overall score</div>
-            <div class="card-value">84/100</div>
-            <div class="card-note">Strong clarity and calm delivery, with room to add more specificity in examples.</div>
-          </div>
-
-          <div class="card metric-card">
-            <div class="card-label">Confidence</div>
-            <div class="card-value">82%</div>
-            <div class="card-note">Voice sounded steady for most of the response.</div>
-          </div>
-
-          <div class="card metric-card">
-            <div class="card-label">Eye contact</div>
-            <div class="card-value">Good</div>
-            <div class="card-note">Mostly camera-facing, with brief downward glances.</div>
-          </div>
-
-          <div class="card wide-card">
-            <div class="card-label">Filler words</div>
-            <div class="card-value">3</div>
-            <div class="card-note">A few hesitation markers were detected, but they did not heavily disrupt clarity.</div>
-          </div>
-
-          <div class="card wide-card">
-            <div class="card-label">Timeline</div>
-            <div class="timeline">
-              <div class="timeline-row">
-                <div class="timeline-time">00:00</div>
-                <div class="timeline-copy">Interview connected. Sarah introduced the session.</div>
-              </div>
-              <div class="timeline-row">
-                <div class="timeline-time">00:18</div>
-                <div class="timeline-copy">Question 1 started: “Tell me about yourself.”</div>
-              </div>
-              <div class="timeline-row">
-                <div class="timeline-time">02:18</div>
-                <div class="timeline-copy">Candidate response completed. AI paused before follow-up.</div>
-              </div>
-              <div class="timeline-row">
-                <div class="timeline-time">02:21</div>
-                <div class="timeline-copy">Follow-up asked: “Why did you choose React for that project?”</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card full-card">
-            <div class="card-label">Transcript</div>
-            <div class="transcript-report">
-              <div class="transcript-entry">
-                <div class="transcript-speaker">Sarah</div>
-                <div>Good afternoon, Vansh. I'm Sarah. I'll be conducting today's interview.</div>
-              </div>
-              <div class="transcript-entry">
-                <div class="transcript-speaker">Sarah</div>
-                <div>Tell me about yourself.</div>
-              </div>
-              <div class="transcript-entry">
-                <div class="transcript-speaker">You</div>
-                <div>
-                  Hi, I'm Vansh. I enjoy building AI-powered products that feel practical and useful. Recently I've been working on full stack systems and interview-focused experiences that combine backend intelligence with clean user interaction.
-                </div>
-              </div>
-              <div class="transcript-entry">
-                <div class="transcript-speaker">Sarah</div>
-                <div>Interesting. Why did you choose React for that project?</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <script src="js/interview1.js"></script>
-</body>
+    <script src="js/interview1.js"></script>
+  </body>
 </html>

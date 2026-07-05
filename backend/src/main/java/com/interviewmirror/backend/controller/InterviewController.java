@@ -1,8 +1,8 @@
 package com.interviewmirror.backend.controller;
 
-import com.interviewmirror.backend.model.InterviewRequest;
-import com.interviewmirror.backend.model.InterviewResponse;
-import com.interviewmirror.backend.service.OllamaService;
+import com.interviewmirror.backend.dto.StartInterviewRequest;
+import com.interviewmirror.backend.dto.StartInterviewResponse;
+import com.interviewmirror.backend.service.InterviewService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,17 +10,20 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class InterviewController {
 
-    private final OllamaService ollamaService;
+    private final InterviewService interviewService;
 
-    public InterviewController(OllamaService ollamaService) {
-        this.ollamaService = ollamaService;
+    public InterviewController(InterviewService interviewService) {
+        this.interviewService = interviewService;
     }
 
-    @PostMapping("/question")
-    public InterviewResponse generateQuestion(@RequestBody InterviewRequest request) {
+    @PostMapping("/start")
+    public StartInterviewResponse startInterview(
+            @RequestBody StartInterviewRequest request) {
 
-        String response = ollamaService.generateQuestion(request.getPrompt());
+        String question = interviewService.startInterview(
+                request.getRole(),
+                request.getExperience());
 
-        return new InterviewResponse(response);
+        return new StartInterviewResponse(question);
     }
 }

@@ -30,6 +30,9 @@ let timer = null;
 let transcriptTimer = null;
 let thinkingTimer = null;
 
+let recognition = null;
+let isListening = false;
+
 let avatarWaveFrame = null;
 let avatarWavePhase = 0;
 let aiSpeaking = false;
@@ -42,23 +45,24 @@ const transcriptLines = [
   "For me, good software is not just functional — it should also feel intentional and calm to use."
 ];
 
-async function getAIQuestion(prompt) {
+async function getAIQuestion(role, experience) {
   try {
     const response = await fetch(
-      "http://localhost:8080/api/interview/question",
+      "http://localhost:8080/api/interview/start",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: prompt
+          role,
+          experience
         })
       }
     );
 
     const data = await response.json();
-    return data.response;
+    return data.question;
 
   } catch (error) {
     console.error(error);
@@ -119,6 +123,52 @@ function setAvatarState(state) {
   avatarShell.classList.remove("speaking", "listening");
   avatarShell.classList.add(state);
   aiSpeaking = state === "speaking";
+}
+
+function startSpeechRecognition() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Speech Recognition is not supported in this browser.");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+
+  recognition.onstart = () => {
+    console.log("Listening...");
+    isListening = true;
+  };
+
+  recognition.onresult = (event) => {
+
+    let transcript = "";
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+
+    if (liveTranscript) {
+      liveTranscript.textContent = transcript;
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error(event.error);
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    console.log("Stopped listening");
+  };
+
+  recognition.start();
 }
 
 async function startCamera() {
@@ -270,19 +320,21 @@ async function runSequence() {
     showScreen(roomScreen);
 
     startCamera();
-    startElapsedTime();
-    startLiveTranscript();
+startElapsedTime();
+console.log("Calling speech recognition...");
+startSpeechRecognition();
 
     await wait(1800);
 
 setAvatarState("speaking");
 
 const firstQuestion = await getAIQuestion(
-  "Ask exactly one professional Java interview question. Return only the question."
+    "Java Developer",
+    "2 years"
 );
 
 if (questionText) {
-  questionText.textContent = firstQuestion;
+    questionText.textContent = firstQuestion;
 }
 
 await wait(2200);
